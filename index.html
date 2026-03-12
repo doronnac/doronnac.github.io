@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Vibe Next: Go-to-Market + Observability for Vibe Coders</title>
+    <meta
+      name="description"
+      content="A go-to-market and observability suite built for vibe coders. Debug production, run campaigns, find customers, and adapt fast after launch."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --ink: #14121f;
+        --ink-soft: #3c3a4a;
+        --paper: #f6f2ea;
+        --sun: #f9b233;
+        --teal: #1e8f8b;
+        --coral: #f36f56;
+        --blue: #2f64d6;
+        --white: #ffffff;
+        --shadow: 0 24px 60px rgba(20, 18, 31, 0.15);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        background: radial-gradient(circle at top left, #fff6dd 0%, #f6f2ea 40%, #efe9df 100%);
+        font-family: "Space Grotesk", "Trebuchet MS", sans-serif;
+        line-height: 1.5;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .page {
+        min-height: 100vh;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .halo {
+        position: absolute;
+        width: 520px;
+        height: 520px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(47, 100, 214, 0.24) 0%, rgba(47, 100, 214, 0) 70%);
+        top: -140px;
+        right: -160px;
+        pointer-events: none;
+      }
+
+      .ribbon {
+        position: absolute;
+        width: 120vw;
+        height: 220px;
+        background: linear-gradient(120deg, rgba(249, 178, 51, 0.25), rgba(243, 111, 86, 0.2));
+        transform: rotate(-6deg);
+        top: 480px;
+        left: -10vw;
+        z-index: 0;
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 32px 7vw 20px;
+        position: relative;
+        z-index: 2;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+      }
+
+      .logo-mark {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--teal), var(--blue));
+        display: grid;
+        place-items: center;
+        color: var(--white);
+        font-weight: 700;
+      }
+
+      .nav {
+        display: flex;
+        gap: 20px;
+        font-size: 0.95rem;
+        color: var(--ink-soft);
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 36px;
+        padding: 40px 7vw 80px;
+        position: relative;
+        z-index: 2;
+        align-items: center;
+      }
+
+      .hero h1 {
+        font-family: "Fraunces", "Georgia", serif;
+        font-size: clamp(2.2rem, 3.6vw, 3.8rem);
+        line-height: 1.05;
+        margin-bottom: 20px;
+      }
+
+      .hero p {
+        color: var(--ink-soft);
+        font-size: 1.1rem;
+        margin-bottom: 24px;
+        max-width: 520px;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: rgba(30, 143, 139, 0.12);
+        color: var(--teal);
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+
+      .cta-row {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        padding: 12px 20px;
+        border-radius: 14px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid transparent;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .btn.primary {
+        background: var(--ink);
+        color: var(--white);
+        box-shadow: var(--shadow);
+      }
+
+      .btn.secondary {
+        background: var(--white);
+        border-color: rgba(20, 18, 31, 0.15);
+        color: var(--ink);
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+      }
+
+      .panel {
+        background: rgba(255, 255, 255, 0.85);
+        border-radius: 24px;
+        padding: 26px;
+        box-shadow: var(--shadow);
+        border: 1px solid rgba(20, 18, 31, 0.08);
+      }
+
+      .panel h3 {
+        margin: 0 0 8px;
+      }
+
+      .grid {
+        display: grid;
+        gap: 20px;
+      }
+
+      .grid.cards {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+
+      .section {
+        padding: 0 7vw 80px;
+        position: relative;
+        z-index: 2;
+      }
+
+      .section h2 {
+        font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+        margin-bottom: 10px;
+      }
+
+      .section p.lead {
+        color: var(--ink-soft);
+        max-width: 620px;
+        margin-bottom: 24px;
+      }
+
+      .timeline {
+        display: grid;
+        gap: 18px;
+      }
+
+      .timeline-item {
+        display: grid;
+        grid-template-columns: 64px 1fr;
+        gap: 16px;
+        align-items: start;
+      }
+
+      .step {
+        width: 54px;
+        height: 54px;
+        border-radius: 18px;
+        background: rgba(47, 100, 214, 0.16);
+        display: grid;
+        place-items: center;
+        font-weight: 700;
+        color: var(--blue);
+      }
+
+      .quote {
+        font-size: 1.1rem;
+        font-style: italic;
+        color: var(--ink-soft);
+      }
+
+      footer {
+        padding: 40px 7vw 60px;
+        color: var(--ink-soft);
+        font-size: 0.9rem;
+      }
+
+      .stagger {
+        animation: fadeUp 0.9s ease forwards;
+        opacity: 0;
+      }
+
+      .stagger:nth-child(2) { animation-delay: 0.1s; }
+      .stagger:nth-child(3) { animation-delay: 0.2s; }
+      .stagger:nth-child(4) { animation-delay: 0.3s; }
+
+      @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(16px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      @media (max-width: 720px) {
+        header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 16px;
+        }
+
+        .nav {
+          flex-wrap: wrap;
+        }
+
+        .timeline-item {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <div class="halo"></div>
+      <div class="ribbon"></div>
+
+      <header>
+        <div class="logo">
+          <div class="logo-mark">VN</div>
+          Vibe Next
+        </div>
+        <nav class="nav">
+          <a href="#why">Why</a>
+          <a href="#pipeline">Pipeline</a>
+          <a href="#teams">Who it is for</a>
+          <a href="#cta">Get early access</a>
+        </nav>
+      </header>
+
+      <section class="hero">
+        <div>
+          <span class="pill">Go-to-market + Observability for vibe coders</span>
+          <h1 class="stagger">You built an app. What’s next?</h1>
+          <p class="stagger">
+            Vibe Next is the post-launch operating system for makers who ship fast. We combine production
+            debugging, growth loops, and customer discovery into one pipeline so you can learn, adapt, and win
+            without slowing down.
+          </p>
+          <div class="cta-row stagger">
+            <a class="btn primary" href="#cta">Join the waitlist</a>
+            <a class="btn secondary" href="#pipeline">See the pipeline</a>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>Today, vibe coders do this manually</h3>
+          <p>
+            The usual stack is split across analytics, ads, alerts, support, and spreadsheets. Vibe Next stitches
+            it into a single place so your product, growth, and reliability data talk to each other.
+          </p>
+          <div class="grid cards" style="margin-top: 18px;">
+            <div class="panel" style="background: #fffaf0; box-shadow: none;">
+              <strong>Detect</strong>
+              <p>Catch production issues before users churn.</p>
+            </div>
+            <div class="panel" style="background: #f0fffb; box-shadow: none;">
+              <strong>Reach</strong>
+              <p>Launch campaigns with real usage signals.</p>
+            </div>
+            <div class="panel" style="background: #f3f5ff; box-shadow: none;">
+              <strong>Learn</strong>
+              <p>Turn feedback into the next build in hours.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="why" class="section">
+        <h2>Built for the pace of vibe coding</h2>
+        <p class="lead">
+          You ship quickly, adapt quickly, and need clarity quickly. Vibe Next connects observability, marketing,
+          and customer intelligence so every change has a measurable next step.
+        </p>
+        <div class="grid cards">
+          <div class="panel">
+            <h3>Unified signal stream</h3>
+            <p>Merge logs, metrics, and user events with campaign performance and customer interviews.</p>
+          </div>
+          <div class="panel">
+            <h3>Action-first insights</h3>
+            <p>Every insight pairs with a recommended action and a checklist to execute it fast.</p>
+          </div>
+          <div class="panel">
+            <h3>Adaptive go-to-market</h3>
+            <p>Launch, measure, and iterate without context switching across tools.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="pipeline" class="section">
+        <h2>The Vibe Next pipeline</h2>
+        <p class="lead">One workflow that answers the question: “What’s next?” every day after you ship.</p>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="step">01</div>
+            <div>
+              <h3>Observe production</h3>
+              <p>Live dashboards show errors, slow paths, and revenue impact in one place.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="step">02</div>
+            <div>
+              <h3>Translate to growth moves</h3>
+              <p>Turn usage patterns into segments, campaigns, and outreach scripts.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="step">03</div>
+            <div>
+              <h3>Find and learn from customers</h3>
+              <p>In-app prompts and follow-ups surface the people to talk to right now.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="step">04</div>
+            <div>
+              <h3>Adapt with confidence</h3>
+              <p>Every iteration is tied to data, so you know what moved the needle.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="teams" class="section">
+        <h2>Made for tiny teams with big momentum</h2>
+        <div class="grid cards">
+          <div class="panel">
+            <h3>Solo builders</h3>
+            <p>Stay close to users and bugs without losing time on tooling overhead.</p>
+          </div>
+          <div class="panel">
+            <h3>Startup operators</h3>
+            <p>Run experiments, measure retention, and keep reliability high with one dashboard.</p>
+          </div>
+          <div class="panel">
+            <h3>Agency shippers</h3>
+            <p>Deliver launches with built-in monitoring and growth reporting clients can trust.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="cta" class="section">
+        <div class="panel" style="display: grid; gap: 16px;">
+          <h2>Ready to answer “what’s next?”</h2>
+          <p class="lead">
+            Start with a 14-day guided pipeline setup and keep everything that matters in one place.
+          </p>
+          <div class="cta-row">
+            <a class="btn primary" href="mailto:hello@vibenext.io">Request early access</a>
+            <span class="quote">“It feels like having a growth lead and SRE in the same room.”</span>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        Vibe Next is a go-to-market and observability service for people who ship fast and want clarity fast.
+      </footer>
+    </div>
+  </body>
+</html>
